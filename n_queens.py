@@ -9,10 +9,7 @@ class GoalTestError(Exception):
 class NQueens(object):
     def __init__(self, N):
         self.size = N
-        self.num_queens = 0
-        self.state = [] #self.init_state(N)
-        self.board = Board(N)
-        self.solution_set = set()#[[] for sol in range(self.count_sol(N))]
+        self.state = State(N)
     
     # https://www.cl.cam.ac.uk/~mr10/backtrk.pdf #
     def count_sol(self, N):
@@ -30,40 +27,22 @@ class NQueens(object):
                 helper((ld | bit ) >> 1, col | bit, (rd | bit ) << 1)
         helper(0,0,0)
         return count
-
-    def add_queen(self, row, col):
-        self.board.add(row,col)
-        self.num_queens += 1
-    
-    def remove_queen(self, row, col):
-        self.board.remove(row,col)
-        self.num_queens -= 1
     
     def dfs(self, row):
-        #     if self.goal_test(row):
-        if len(self.board.locs) == self.size:
-            if self.board.locs not in self.solution_set:
-
-                self.solution_set.add(self.board.locs)
-                print("WE JUST APPENDED: {}".format(self.board.locs))
-                print("ITS LENGTH IS NOW: {}".format(len(self.solution_set)))
-            print("WTF?")
-            self.print_sol()
-            print("_________________________")
-            return "I have returned into run()"
+        if self.goal_test(len(self.state.locs)):
+    #   if len(self.state.locs) == self.size:
+            if self.state.locs not in self.state.solution_set:
+                self.state.solution_set.add(self.state.locs)
+            return
         for col in range(self.size):
-            if self.board.no_conflict(row, col):
-                self.board.add(row,col)
+            if self.state.no_conflict(row, col):
+                self.state.add(row,col)
                 self.dfs(row + 1)
-                self.board.remove(row,col)
-            print(self.board.locs)
-        return "I have ran more than I should"
+                self.state.remove(row,col)
+            print(self.state.locs)
             
     def print_sol(self):
-        i = 0
-        for s in self.solution_set:
-            print("[{}]".format(i))
-            i += 1
+        for s in self.state.solution_set:
             print(*s)
 
     def init_state(self, N):
@@ -82,17 +61,16 @@ class NQueens(object):
         return state == self.size
 
     def run(self):
-        alg = self.dfs(0)
-        print("alg={}".format(alg))
+        self.dfs(0)
         print("THE SOLUTION SET IS:")
         self.print_sol()
-        self.state = self.final_state(self.board.locs)
-        return self.state
+        return self.state.solution_set
 
 def main():
     a1 = NQueens(8)
     print(a1.count_sol(8))
-    print(a1.run())
+    sset = a1.run()
+    print((2,7,3,6,0,5,1,4) in sset)
 
 if __name__ == '__main__':
     main()
