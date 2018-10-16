@@ -1,13 +1,13 @@
 """
 This module defines the NQueens class.
 """
-from board import *
-
-class GoalTestError(Exception):
-    pass
+from sys import argv
+from state import *
 
 class NQueens(object):
     def __init__(self, N):
+        if N < 4:
+            raise ValueError("N must be greater or equal to 4")
         self.size = N
         self.state = State(N)
     
@@ -30,12 +30,12 @@ class NQueens(object):
     
     def dfs(self, row):
         if self.goal_test(len(self.state.locs)):
-    #   if len(self.state.locs) == self.size:
+            # don't add duplicates to solution set
             if self.state.locs not in self.state.solution_set:
                 self.state.solution_set.add(self.state.locs)
             return
         for col in range(self.size):
-            if self.state.no_conflict(row, col):
+            if self.state.is_safe(row, col):
                 self.state.add(row,col)
                 self.dfs(row + 1)
                 self.state.remove(row,col)
@@ -44,12 +44,6 @@ class NQueens(object):
     def print_sol(self):
         for s in self.state.solution_set:
             print(*s)
-
-    def init_state(self, N):
-        return [-1 for i in range(N)]
-    
-    def final_state(self, state):
-        return tuple(state)
 
     # returns the board with a queen added to the specified square
     def transition_model(self, row, col):
@@ -62,15 +56,13 @@ class NQueens(object):
 
     def run(self):
         self.dfs(0)
-        print("THE SOLUTION SET IS:")
-        self.print_sol()
         return self.state.solution_set
 
 def main():
-    a1 = NQueens(8)
-    print(a1.count_sol(8))
-    sset = a1.run()
-    print((2,7,3,6,0,5,1,4) in sset)
-
-if __name__ == '__main__':
-    main()
+    N = int(argv[1])
+    a1 = NQueens(N)
+    out = a1.run()
+    n_sols = a1.count_sol(N)
+    a1.print_sol()
+    print(len(out) == n_sols)
+main()

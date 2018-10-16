@@ -2,11 +2,12 @@ from n_queens import *
 import unittest
 
 class TestProblem(unittest.TestCase):
-    def n_queens(self):
+    def test_n_queens(self):
         agent1, agent2 = NQueens(5), NQueens(8)
-        self.assertEqual(agent1.run(), (3, 1, 4, 2, 0))
-        self.assertEqual(agent2.run(), (7, 3, 0, 2, 5, 1, 6, 4))
-#### SOLUTION SET #####
+        self.assertIn((3, 1, 4, 2, 0), agent1.run())
+        self.assertIn((7, 3, 0, 2, 5, 1, 6, 4), agent2.run())
+#### SOLUTION SET FOR 8 QUEENS #####
+"""
 s1 = (2, 7, 3, 6, 0, 5, 1, 4)
 s2 = (7, 2, 0, 5, 1, 4, 6, 3)
 s3 = (7, 3, 0, 2, 5, 1, 6, 4)
@@ -19,7 +20,7 @@ s9 = (6, 1, 3, 0, 7, 4, 2, 5)
 s10 = (5, 3, 0, 4, 7, 1, 6, 2)
 s11 = (5, 2, 6, 3, 0, 7, 1, 4)
 s12 = (5, 3, 6, 0, 7, 1, 4, 2)
-"""
+
     7   6   5   4   3   2   1   0
    --------------------------------
 7 |   | x |   | x |   | x |   | x  | 7
