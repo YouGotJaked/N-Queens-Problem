@@ -41,7 +41,7 @@ class NQueens(object):
     
     def dfs(self, row):
         if self.goal_test(self.state):
-            self.state.solution_set.add(self.state.frontier)
+            self.state.solution_set.add(self.state.frontier.top())
             return
         # interate through each column per row
         for col in range(self.size):
@@ -66,13 +66,13 @@ class NQueens(object):
     
     # returns N queens are on the board, none attacked (verified with dfs() function)
     def goal_test(self, state):
-        return not -1 in state.frontier
+        return not -1 in state.frontier.top()
 
     def run(self):
         self.dfs(0)
         return self.state.solution_set
 
-"""
+
 def main():
     N = int(argv[1])
     a1 = NQueens(N)
@@ -82,4 +82,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-"""
+

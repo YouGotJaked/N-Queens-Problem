@@ -16,9 +16,12 @@ class State(object):
     def __init__(self, N):
         self.size = N
         self.board = [['-1' for row in range(N)] for col in range(N)] # N x N game board
-        self.frontier = tuple([-1 for row in range (N)]) # keeps track of current queens on board, convert to NODE OBJECT
+        self.frontier = Stack(Node(self.init_state())) # keeps track of current queens on board, convert to NODE OBJECT
         self.solution_set = set() # unordered set of total valid solutions
 
+    def init_state(self):
+        return tuple([-1 for row in range(self.size)])
+    
     # O(N), N = row
     def is_safe(self, row, col):
         """ Checks rows before 'row' as no queen can be on rows > 'row'.
@@ -42,10 +45,13 @@ class State(object):
 
     def add(self, row, col):
         self.board[row][col] = 'Q'
-        self.frontier = self.frontier[:col] + (row,) + self.frontier[col+1:] # create new tuple with col appended, SHOULD BE ROW
+        temp = self.frontier.top()
+        self.frontier.append(temp[:col] + (row, ) + temp[col+1:])
+        #self.frontier = self.frontier[:col] + (row,) + self.frontier[col+1:] # create new tuple with col appended, SHOULD BE ROW
         # VALUE OF R IN THE C-TH ENTRY OF TUPLE
         
 
     def remove(self, row, col):
         self.board[row][col] = '-1'
-        self.frontier = self.frontier[:col] + (-1,) + self.frontier[col+1:] # create new tuple with 'row'th element removed
+        self.frontier.pop()
+        #self.frontier = self.frontier[:col] + (-1,) + self.frontier[col+1:] # create new tuple with 'row'th element removed

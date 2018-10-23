@@ -7,9 +7,9 @@ class Node(object):
         self.locs = locs
         self.next = next
 
-class UnorderedList(list):
-    def __init__(self):
-        self.head = None
+class Stack(object):
+    def __init__(self, head=None):
+        self.head = head
     
     def __str__(self):
         lst = []
@@ -40,15 +40,22 @@ class UnorderedList(list):
         prev.next = None
         return current.locs
 
+    def top(self):
+        prev = None
+        current = self.head
+        while current.next is not None:
+            prev = current
+            current = current.next
+        return current.locs
 
-
+"""
 N=8
 n1 = Node(tuple([-1 for row in range (N)]))
 l1 = n1.locs
 n2 = Node(n1.locs[:3] + (7,) + n1.locs[3+1:])
 l2 = n2.locs
 
-ul = UnorderedList()
+ul = Stack()
 ul.append(l1)
 ul.append(l2)
 ul.append(l1)
@@ -64,3 +71,4 @@ print(ul)
 
 print("Popped: {}".format(ul.pop()))
 print(ul)
+"""
