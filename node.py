@@ -1,74 +1,37 @@
 """
-This module defines the Node class.
+This module defines the Node and Stack class.
 """
 
 class Node(object):
-    def __init__(self, locs, next=None):
-        self.locs = locs
+    def __init__(self, data, next=None):
+        self.data = data
         self.next = next
 
 class Stack(object):
-    def __init__(self, head=None):
-        self.head = head
+    def __init__(self, top=None):
+        self.top = top
     
     def __str__(self):
         lst = []
-        current = self.head
+        current = self.top
         while current is not None:
-            lst.append(current.locs)
+            lst.append(current.data)
             current = current.next
         return str(lst)
-            
-    def empty(self):
-        return self.head == None
 
-    def append(self, locs):
-        current = self.head
-        if current:
-            while current.next is not None:
-                current = current.next
-            current.next = Node(locs)
+    # add a new element to the top of the stack
+    def push(self, data):
+        if self.top is None:
+           self.top = Node(data)
         else:
-            self.head = Node(locs)
+           temp = Node(data)
+           temp.next = self.top
+           self.top = temp
 
+    # remove and return the last element added to the stack
     def pop(self):
-        prev = None
-        current = self.head
-        while current.next is not None:
-            prev = current
-            current = current.next
-        prev.next = None
-        return current.locs
-
-    def top(self):
-        prev = None
-        current = self.head
-        while current.next is not None:
-            prev = current
-            current = current.next
-        return current.locs
-
-"""
-N=8
-n1 = Node(tuple([-1 for row in range (N)]))
-l1 = n1.locs
-n2 = Node(n1.locs[:3] + (7,) + n1.locs[3+1:])
-l2 = n2.locs
-
-ul = Stack()
-ul.append(l1)
-ul.append(l2)
-ul.append(l1)
-ul.append(l2)
-ul.append(l1)
-ul.append(l2)
-ul.append(l1)
-ul.append(l2)
-ul.append(l1)
-ul.append(l2)
-current = ul.head
-print(ul)
-
-print("Popped: {}".format(ul.pop()))
-print(ul)
-"""
+        if self.top is None:
+            return None
+        temp = self.top
+        self.top = self.top.next
+        return temp.data
