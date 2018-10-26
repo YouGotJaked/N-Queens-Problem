@@ -1,53 +1,86 @@
-"""
+"""state.py - module to store the state of the N Queens problem.
 This module defines the State class.
 """
-from node import *
+from node import Node, Stack
 
-class State(object):
-    """ Class to define a Chess gameboard.
+
+class State():
+    """Class to define the state space for the N Queens problem.
+        
+    Args:
+        n (int): number of queens
     Attributes:
         size (int): size of the board
-    Methods:
-        is_safe(self, row, col)
-        add(self, row, col)
-        remove(self, row, col)
+        board (str[][]): matrix to define the board
+        frontier (Stack):
+        solution_set (set): unordered set of total valid solutions
     """
-    # O(1)
-    def __init__(self, N):
-        self.size = N
-        self.board = [['-1' for row in range(N)] for col in range(N)] # N x N game board
-        self.frontier = Stack(Node(self.init_state())) # keeps track of current queens on board,
-        self.solution_set = set() # unordered set of total valid solutions
+    def __init__(self, n):
+        """Constructor for the State class.
+        Args:
+            n (int): number of queens
+        """
+        self.size = n
+        self.board = [['-1' for row in range(n)] for col in range(n)]
+        self.frontier = Stack(Node(self.init_state()))
+        self.solution_set = set()
 
     def init_state(self):
+        """Return a tuple of length `self.size`, each element set to -1."""
         return tuple([-1 for row in range(self.size)])
-    
-    # O(N), N = row
+
     def is_safe(self, row, col):
-        """ Checks rows before 'row' as no queen can be on rows > 'row'.
-            Args:
-            Returns:
+        """Check if the current square is safe to place a queen.
+            
+        Only check columns before `col` as no queen can be on columns greater
+        than the current column.
+        The current square is not safe if the current square or one of its
+        diagonals contains a queen.
+        
+        Args:
+            row (int): current row index
+            col (int): current column index
+        Returns:
+            bool: True if successful, False otherwise
         """
-        l_diag = r_diag = col
-        for i in range(row, -1, -1):
+        l_diag = r_diag = row
+        for i in range(col, -1, -1):
             # current square has a queen
-            if self.board[i][col] == 'Q':
+            if self.board[row][i] == 'Q':
                 return False
             # l_diag is valid square and has a queen
-            if l_diag >= 0 and self.board[i][l_diag] == 'Q':
+            if l_diag >= 0 and self.board[l_diag][i] == 'Q':
                 return False
             # r_diag is valid square and has a queen
-            if r_diag < self.size and self.board[i][r_diag] == 'Q':
+            if r_diag < self.size and self.board[r_diag][i] == 'Q':
                 return False
             l_diag -= 1
             r_diag += 1
         return True
 
     def add(self, row, col):
+        """Add a queen to the board at the specified square.
+            
+        Assign square at row `row` and column `col` to 'Q', or a queen.
+        Push a new to the frontier stack.
+        
+        Args:
+            row (int):
+            col (int):
+        """
         self.board[row][col] = 'Q'
         temp = self.frontier.top.data
-        self.frontier.push(temp[:col] + (row, ) + temp[col+1:])
-    
+        self.frontier.push(temp[:col] + (row,) + temp[col + 1:])
+
     def remove(self, row, col):
+        """Remove a queen from the board at the specified square.
+            
+        Assign square at row `row` and column `col` to '-1', or not a queen.
+        Pop the top element from the frontier stack.
+        
+        Args:
+            row (int): current row index
+            col (int): current column index
+        """
         self.board[row][col] = '-1'
-        self.frontier.pop() # create new tuple with 'row'th element removed
+        self.frontier.pop()
