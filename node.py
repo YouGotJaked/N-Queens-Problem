@@ -1,4 +1,5 @@
-"""node.py - module to
+"""node.py - module to store the frontier stack of states in the search.
+    
 This module defines the Node and Stack classes.
 """
 
@@ -10,9 +11,9 @@ class Node():   # pylint: disable=too-few-public-methods
         data (tuple): n-element tuple representing a state in the search
         next (Node): node pointed to by this node (default is `None`)
     """
+    
     def __init__(self, data, next=None):    # pylint: disable=redefined-builtin
-        """Constructor for the Node class.
-        """
+        """Constructor for the Node class."""
         self.data = data
         self.next = next
 
@@ -22,6 +23,7 @@ class Stack():
     Attributes:
         top (Node): last element inserted into the stack
     """
+    
     def __init__(self, top=None):
         """Constructor for the Stack class.
             

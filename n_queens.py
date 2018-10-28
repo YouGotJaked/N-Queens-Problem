@@ -1,4 +1,5 @@
 """n_queens.py - module to define and implement the N Queens problem.
+    
 This module defines the NQueens class.
 """
 from state import State
@@ -9,17 +10,16 @@ class NQueens():
         
     Args:
         n (int): number of queens
-    
     Attributes:
         size (int): size of the board
         state (State): state space of the board
     """
+    
     def __init__(self, n):
-        """Constructor
-            Args:
-                n (int): number of queens
-            Raises:
-                ValueError if `n` is less than 4
+        """Constructor for the NQueens class.
+
+        Raises:
+            ValueError if `n` is less than 4
         """
         if n < 4:
             raise ValueError("N must be greater or equal to 4")
@@ -28,33 +28,40 @@ class NQueens():
 
     def dfs(self, col):
         """Perform depth-first search over valid queen placements on the board.
+            
+        Iterate through each row, per column.
+        Check if the current square is safe.
+        If it is safe, add the square to the frontier stack.
+        Then, recursively call `dfs()` on the next column.
+        Remove the current square from the frontier stack after returning from
+        previous recursive call.
+        
         Args:
             col (int): current column index
         """
-        if self.goal_test(self.state.frontier.top.data):
+        if self.goal_test():
             self.state.solution_set.add(self.state.frontier.top.data)
             return
-        # interate through each row per column
         for row in range(self.size):
-            # if current square is safe
             if self.state.is_safe(row, col):
-                # add square to solution
                 self.state.add(row, col)
-                # go to next column
                 self.dfs(col + 1)
-                # remove square from solution
                 self.state.remove(row, col)
 
-    # returns N queens are on the board, none attacked
-    def goal_test(self, state):
+    def goal_test(self):
         """Return `self.size` queens are on the board, none attacked.
-        Args:
-            state (tuple):
+            
+        Guaranteed to be safe if `self.size` queens in current search state.
+        This is verified with the `dfs()` method.
+    
+        Returns:
+            bool: True if successful, False otherwise
         """
-        return -1 not in state
+        return -1 not in self.state.frontier.top.data
 
     def run(self):
         """Run the depth-first search algorithm.
+            
         Returns:
             The complete set of goal states
         """
