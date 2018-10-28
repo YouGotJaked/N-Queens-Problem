@@ -1,0 +1,38 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage{listings}
+\lstset{
+numbers=left, 
+numberstyle=\small, 
+numbersep=8pt, 
+frame = single, 
+language=Python, 
+framexleftmargin=15pt}
+\setlength{\parindent}{0pt}
+\titleformat*{\section}{\large\bfseries}
+\newcommand{\spc}{\hspace*{1ex}}
+
+\begin{document}
+{\center
+	{\bfseries COEN 166 Artificial Intelligence} \\
+	{\bfseries Fall 2018} \\~\\
+	{\bfseries Lab Assignment \#3: The N-Queens Problem} \\
+	{Assigned on October 8, 2018, Due on October 29, 2018} \\~\\
+	{Name: Jake Day \qquad ID: W1113850} \\
+}
+
+\section*{\bfseries Pseudocode}
+	\subsection*{Depth-First Search Algorithm}
+		Iterate through each row, per column of the chessboard.
+		Check if the current square is safe.
+		If it is safe, add the square to the frontier stack of states in the search.
+		Then, recursively call the depth-first search algorithm on the next column.
+		Once a state contains N queens on the board, add it to the solution set.
+		Remove the current state from the frontier stack after returning from the previous recursive call.
+	
+\section*{\bfseries Test Cases}
+	Create two agents to test the 5-Queens and 8-Queens problems.
+	Run the depth-first search algorithm on each agent to return their respective solution sets.
+	Check if a verified solution exists within the solution set of each problem.
+\end{document}

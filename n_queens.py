@@ -33,8 +33,8 @@ class NQueens():
         Check if the current square is safe.
         If it is safe, add the square to the frontier stack.
         Then, recursively call `dfs()` on the next column.
-        Remove the current square from the frontier stack after returning from
-        previous recursive call.
+        Remove the current square from the board and state from the frontier
+        stack after returning from previous recursive call.
         
         Args:
             col (int): current column index
